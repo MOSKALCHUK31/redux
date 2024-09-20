@@ -1,62 +1,33 @@
 import './App.css'
 import {useDispatch, useSelector} from 'react-redux';
-import {addCustomerAction, removeCustomerAction} from './store/customerReducer'
-import {fetchCustomers} from './asyncActions/customers'
+import { incrementCreator, decrementCreator } from './store/counterReducer'
+import { getUsersCreator } from './store/usersReducer'
 
 function App() {
+    const count = useSelector((state) => state.countReducer.count)
+    const users = useSelector((state) => state.userReducer.users)
     const dispatch = useDispatch()
-    const cash = useSelector((state) => state.cash.cash)
-    const customers = useSelector((state) => state.customers.customers)
-
-    const addCash = () => {
-        dispatch({ type: 'ADD_CASH', payload: Number(prompt()) })
-    }
-
-    const getCash = () => {
-        dispatch({ type: 'GET_CASH', payload: Number(prompt()) })
-    }
-
-    const addCustomer = () => {
-        dispatch(addCustomerAction({
-            name: prompt(),
-            id: new Date()
-        }))
-    }
-
-    const removeCustomer = (id) => {
-        dispatch(removeCustomerAction(id))
-    }
-
-    const getCustomers = async () => {
-        dispatch(fetchCustomers())
-    }
 
     return (
         <div className="App">
             <div>
-                {cash}
+                {count}
             </div>
             <div>
-                <button onClick={addCash}>
-                    ADD BALANCE
+                <button onClick={() => dispatch(incrementCreator())}>
+                    INCREMENT
                 </button>
-                <button onClick={getCash}>
-                    GET BALANCE
+                <button onClick={() => dispatch(decrementCreator())}>
+                    DECREMENT
                 </button>
-            </div>
-            <br/><br/>
-            <div>
-                <button onClick={addCustomer}>
-                    ADD CUSTOMER
-                </button>
-                <button onClick={getCustomers}>
-                    GET MANY CUSTOMERS => ...
+                <button>
+                    GET USERS => ...
                 </button>
             </div>
             <div>
                 <ul>
-                    {customers.map((c) => (
-                        <li onClick={() => removeCustomer(c.id)} key={c.id}>
+                    {users.map((c) => (
+                        <li key={c.id}>
                             {c.name}
                         </li>
                     ))}
